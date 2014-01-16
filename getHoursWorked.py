@@ -60,6 +60,7 @@ def traverseData(items, month):
     startTime = 0
     stopTime = 0
     isCurrentlyAtWork = False
+    alreadyTookBreaksToday = False
     worklat = 525258333 / 10000000
     worklon = 135310000 / 10000000
     beginningOfMonth = datetime(month[0],month[1],1)
@@ -69,6 +70,8 @@ def traverseData(items, month):
     endOfMonth = endOfMonth + relativedelta(months=1)
     endOfMonth = timegm(endOfMonth.utctimetuple())
     endOfMonth *= 1000
+    lastTimeTookBreaks = 0
+    s = "Die folgenden Angaben sind in Unixzeit gegeben.\n\n"
     for item in items:
         t = int(item["timestampMs"])
         if not (beginningOfMonth < t < endOfMonth ):
@@ -79,9 +82,12 @@ def traverseData(items, month):
         lon /= 10000000
         close = getDistanceFromLatLonInKm(worklat,worklon,lat,lon) \
                 < tolerance
+        alreadyTookBreaksToday = alreadyTookBreaksToday and \
+                        (t-lastTimeTookBreaks)<(18*60*60*1000)
         if ( not isCurrentlyAtWork ) and close:
             isCurrentlyAtWork = True
             startTime = t
+            s += "Ich fing um  " + str(t) "  an zu arbeiten.\n"
         elif isCurrentlyAtWork and close:
             pass
         elif ( not isCurrentlyAtWork ) and ( not close ):
@@ -89,11 +95,17 @@ def traverseData(items, month):
         elif isCurrentlyAtWork and ( not close ):
             isCurrentlyAtWork = False
             stopTime = t
+            s += "Ich habe um  " + str(t) + "  aufgehoert zu arbeiten.\n"
             runningTotal += (stopTime - startTime)
-            runningTotal += breaks
+            if not alreadyTookBreaksToday:
+                runningTotal += breaks
+                alreadyTookBreaksToday = True
+                lastTimeTookBreaks = t
     #f_out.close()
-    print(str(month[0])+'-'+str(month[1]))
-    print('    '+str( (-runningTotal)/(1000*3600) ))
+    #print(str(month[0])+'-'+str(month[1]))
+    s += "Insgesamt habe ich  " + str( (-runningTotal)/(1000*3600) )
+    s += "  Stunden gearbeitet.\n"
+    print(s)
 
 # Haversine formula
 def getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2):
