@@ -43,7 +43,7 @@ def main(argv):
 
         items = data["locations"]
         years = [2013]
-        months = [ 1+m for m in range(12) ]
+        months = [12]
         for month in [ [y,m] for y in years for m in months ]:
             traverseData(items,month)
 
@@ -87,7 +87,9 @@ def traverseData(items, month):
         if ( not isCurrentlyAtWork ) and close:
             isCurrentlyAtWork = True
             startTime = t
-            s += "Ich fing um  " + str(t) "  an zu arbeiten.\n"
+            s += "Ich habe um  " 
+            s += datetime.fromtimestamp(int(round(t/1000))).strftime('%Y-%m-%d %H:%M:%S') 
+            s += "  aufgehoert zu arbeiten.\n"
         elif isCurrentlyAtWork and close:
             pass
         elif ( not isCurrentlyAtWork ) and ( not close ):
@@ -95,7 +97,9 @@ def traverseData(items, month):
         elif isCurrentlyAtWork and ( not close ):
             isCurrentlyAtWork = False
             stopTime = t
-            s += "Ich habe um  " + str(t) + "  aufgehoert zu arbeiten.\n"
+            s += "Ich fing um  " 
+            s += datetime.fromtimestamp(int(round(t/1000))).strftime('%Y-%m-%d %H:%M:%S') 
+            s += "  an zu arbeiten.\n"
             runningTotal += (stopTime - startTime)
             if not alreadyTookBreaksToday:
                 runningTotal += breaks
