@@ -71,7 +71,7 @@ def traverseData(items, month):
     endOfMonth = timegm(endOfMonth.utctimetuple())
     endOfMonth *= 1000
     lastTimeTookBreaks = 0
-    s = "Die folgenden Angaben sind in Unixzeit gegeben.\n\n"
+    s = ""
     for item in items:
         t = int(item["timestampMs"])
         if not (beginningOfMonth < t < endOfMonth ):
