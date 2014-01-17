@@ -88,7 +88,7 @@ def traverseData(items, month):
             isCurrentlyAtWork = True
             startTime = t
             s += "Ich habe um  " 
-            s += datetime.fromtimestamp(int(round(t/1000))).strftime('%Y-%m-%d %H:%M:%S') 
+            s += datetime.fromtimestamp(int(round(t/1000))).strftime('%Y-%m-%d %H:%M') 
             s += "  aufgehoert zu arbeiten.\n"
         elif isCurrentlyAtWork and close:
             pass
@@ -98,7 +98,7 @@ def traverseData(items, month):
             isCurrentlyAtWork = False
             stopTime = t
             s += "Ich fing um  " 
-            s += datetime.fromtimestamp(int(round(t/1000))).strftime('%Y-%m-%d %H:%M:%S') 
+            s += datetime.fromtimestamp(int(round(t/1000))).strftime('%Y-%m-%d %H:%M') 
             s += "  an zu arbeiten.\n"
             runningTotal += (stopTime - startTime)
             if not alreadyTookBreaksToday:
