@@ -42,8 +42,8 @@ def main(argv):
             return
 
         items = data["locations"]
-        years = [2013]
-        months = [12]
+        years = [2014]
+        months = [1]
         for month in [ [y,m] for y in years for m in months ]:
             traverseData(items,month)
 
