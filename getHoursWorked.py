@@ -83,7 +83,7 @@ def traverseData(items, month):
         close = getDistanceFromLatLonInKm(worklat,worklon,lat,lon) \
                 < tolerance
         alreadyTookBreaksToday = alreadyTookBreaksToday and \
-                        (t-lastTimeTookBreaks)<(18*60*60*1000)
+                        abs(t-lastTimeTookBreaks)<(18*60*60*1000)
         if ( not isCurrentlyAtWork ) and close:
             isCurrentlyAtWork = True
             startTime = t
